@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Los Cabos Tourism Board — DestinationPick × Los Cabos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ───────── RESET & BASE ───────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);font-size:16px;color:var(--ink);line-height:1.5;
+  background:linear-gradient(160deg,#e8eef6 0%,#f4efe8 45%,#e6ecf4 100%);
+  background-attachment:fixed;min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ───────── TOKENS ───────── */
+:root{
+  --azure:#2b7fff;--sky:#426188;--lift:#9ec3ff;--ink:#1b1b1b;
+  --muted:#5f6b7e;--muted-2:#8b95a8;--border:rgba(27,27,27,.1);--cloud:#f5f8fc;
+  --glass:rgba(255,255,255,.42);--glass-strong:rgba(255,255,255,.58);--glass-bd:rgba(255,255,255,.55);
+  --dark-glass:rgba(24,30,42,.72);--blur:blur(16px) saturate(150%);
+  --gutter:clamp(1.25rem,4vw,4rem);--py:clamp(3.5rem,7vw,5.5rem);
+  --r-btn:999px;--r-card:14px;--r-input:8px;--r-img:10px;--error:#e05252;
+  /* Fonts: Playfair Display for headings, Cormorant italic for script accents, DM Sans for body */
+  --head:'Playfair Display',Georgia,serif;
+  --script:'Cormorant Garamond',Georgia,serif;
+  --display:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+.section--clear{background:transparent}
+.section--glass{background:rgba(255,255,255,.24);-webkit-backdrop-filter:blur(10px) saturate(130%);backdrop-filter:blur(10px) saturate(130%)}
+.hero__scene{
+  position:absolute;inset:0;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;
+  background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,0) 40%);
+}
+.hero__scene img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  display:block;transition:opacity .3s ease;
+}
+
+/* ───────── TYPOGRAPHY ───────── */
+.label{display:block;font-size:.66rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--azure)}
+.rule{display:block;width:32px;height:1.5px;background:var(--sky);margin:1rem 0}
+.rule--center{margin:1rem auto}
+.rule--light{background:var(--lift)}
+
+h2{font-family:var(--head);font-size:clamp(1.9rem,3vw,3rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--ink)}
+h2 em{font-family:var(--script);font-style:italic;font-weight:600;color:var(--sky)}
+h2.on-dark{color:#eef5fc}
+h2.on-dark em{color:var(--lift)}
+
+.body-text{font-size:.97rem;font-weight:400;line-height:1.82;color:var(--muted)}
+.body-text.on-dark{color:rgba(238,245,252,.65)}
+
+/* ───────── BUTTONS ───────── */
+.btn{
+  display:inline-block;font-family:var(--sans);font-size:.7rem;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;padding:.9rem 2rem;cursor:pointer;
+  border:1.5px solid var(--azure);border-radius:var(--r-btn);color:var(--ink);
+  background:rgba(255,255,255,.32);
+  -webkit-backdrop-filter:blur(10px) saturate(140%);backdrop-filter:blur(10px) saturate(140%);
+  transition:background .22s,color .22s,transform .2s;
+}
+.btn:hover{background:var(--azure);color:#fff;transform:translateY(-1px)}
+.btn--outline{
+  background:transparent;border:none;border-bottom:1.5px solid var(--border);
+  border-radius:0;color:var(--muted);padding:.2rem 0;letter-spacing:.1em;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+.btn--outline:hover{color:var(--azure);border-color:var(--azure);background:transparent;transform:none}
+
+/* ───────── NAV ───────── */
+.nav{
+  position:fixed;inset:0 0 auto;z-index:100;min-height:72px;
+  display:flex;align-items:center;justify-content:space-between;padding:11px var(--gutter);
+  background:rgba(255,255,255,.45);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid var(--glass-bd);
+}
+.nav__brand{text-decoration:none;display:inline-flex;flex-direction:column;align-items:flex-start;gap:.3rem;line-height:1}
+.nav__logo{height:22px;width:auto;max-width:none;display:block;flex-shrink:0;align-self:flex-start;object-fit:contain}
+.nav__name{display:block;font-family:var(--head);font-size:1.2rem;font-weight:600;color:var(--ink);letter-spacing:.01em}
+.nav__cta{
+  background:rgba(255,255,255,.3);color:var(--azure);
+  border:1.5px solid var(--azure);border-radius:var(--r-btn);
+  padding:.55rem 1.4rem;font-family:var(--sans);font-size:.64rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:background .22s,color .22s;
+}
+.nav__cta:hover{background:var(--azure);color:#fff}
+.nav__links{display:none;align-items:center;gap:1.1rem;flex-wrap:wrap}
+.nav__links a{font-size:.58rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:color .2s;white-space:nowrap}
+.nav__links a:hover{color:var(--azure)}
+@media(min-width:1100px){.nav__links{display:flex}}
+
+/* ───────── HERO ───────── */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;padding-top:84px;background:transparent}
+.hero__left{display:flex;flex-direction:column;justify-content:center;padding:5rem var(--gutter) 5rem 7rem;position:relative}
+.hero__left::after{content:'';position:absolute;right:0;top:15%;bottom:15%;width:1px;background:linear-gradient(to bottom,transparent,var(--glass-bd),transparent)}
+.hero__brand{display:inline-block;font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--sky);margin-bottom:1rem;padding-bottom:.55rem;border-bottom:1.5px solid var(--azure)}
+.hero__badges{font-size:.78rem;font-weight:500;color:var(--muted);line-height:1.75;margin-bottom:1rem;letter-spacing:.01em}
+.hero__tagline{font-size:.92rem;font-weight:600;color:var(--sky);margin-bottom:.5rem;letter-spacing:.01em}
+.hero__title{font-family:var(--head);font-size:clamp(2.6rem,4.2vw,5rem);font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.5rem;max-width:560px;text-transform:uppercase}
+.hero__title em{font-family:var(--script);font-style:italic;font-weight:600;color:var(--sky);text-transform:none;display:inline-block;line-height:1.1;font-size:.9em}
+.hero__desc{max-width:410px;margin-bottom:2rem}
+.hero__actions{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.hero__right{position:relative;overflow:hidden;background:linear-gradient(135deg,#bcd2ec,#e7dcc9)}
+.hero__overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(24,16,10,.32) 0%,transparent 45%);z-index:2}
+.hero__caption{position:absolute;bottom:2rem;left:2rem;z-index:3;font-size:.58rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);line-height:1.9}
+.hero__float{
+  position:absolute;top:2.5rem;right:2.5rem;z-index:5;width:218px;
+  background:var(--glass);
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd);border-radius:var(--r-card);
+  padding:1.5rem 1.4rem 1.2rem;box-shadow:0 8px 30px rgba(27,27,27,.1);
+}
+.hero__float-title{font-family:var(--head);font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.hero__float-sub{font-size:.62rem;font-weight:400;color:var(--muted);margin-bottom:1rem;line-height:1.55}
+.hff{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem}
+.hff input,.hff select{
+  width:100%;background:rgba(255,255,255,.55);border:1px solid var(--glass-bd);border-radius:var(--r-input);
+  font-family:var(--sans);font-size:.78rem;font-weight:400;color:var(--ink);padding:.5rem .55rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
+}
+.hff input::placeholder{color:var(--muted-2)}
+.hff input:focus,.hff select:focus{border-color:var(--azure);box-shadow:0 0 0 3px rgba(43,127,255,.16)}
+.hff-btn{
+  width:100%;background:rgba(43,127,255,.9);color:#fff;border:1px solid var(--azure);border-radius:var(--r-btn);
+  padding:.7rem;font-family:var(--sans);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  transition:background .22s;
+}
+.hff-btn:hover{background:var(--azure)}
+.hff-note{font-size:.54rem;font-weight:400;color:var(--muted-2);text-align:center;line-height:1.5}
+
+/* ───────── TRUST BAR ───────── */
+.trust{background:rgba(24,30,42,.55);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-bottom:1px solid rgba(255,255,255,.06)}
+.trust__inner{display:flex;align-items:stretch;max-width:1200px;margin:0 auto;padding:0 var(--gutter)}
+.trust__item{flex:1;display:flex;align-items:center;gap:.85rem;padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)}
+.trust__item:last-child{border-right:none}
+.trust__label{font-size:.62rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:rgba(238,245,252,.5);line-height:1.5}
+.trust__label strong{display:block;color:var(--lift);font-weight:600;font-size:.7rem}
+
+/* ───────── SECTION WRAPPER ───────── */
+.section{padding:var(--py) var(--gutter)}
+.section--cream{background:transparent}
+.section--cream2{background:rgba(255,255,255,.24);-webkit-backdrop-filter:blur(10px) saturate(130%);backdrop-filter:blur(10px) saturate(130%)}
+.section--cream3{background:rgba(255,255,255,.32);-webkit-backdrop-filter:blur(12px) saturate(130%);backdrop-filter:blur(12px) saturate(130%)}
+.section--dark{background:var(--dark-glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);position:relative;overflow:hidden}
+.section--wine{background:rgba(43,64,93,.62);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.stats-parallax{background-image:linear-gradient(rgba(20,34,54,.74),rgba(20,34,54,.8)),url("https://assets.simpleviewinc.com/sv-loscabos/image/upload/c_fill,f_jpg,h_786,q_65,w_1280/v1/cms_resources/clients/loscabosmx/The_arch_4_34d3ae36-0603-43eb-ad62-1752869856d9.jpg");background-position:center;background-size:cover;background-attachment:fixed;-webkit-backdrop-filter:none;backdrop-filter:none}
+.section__header{margin-bottom:3.5rem}
+.section__header--center{text-align:center}
+.section__header--center .rule{margin:1rem auto}
+
+/* ───────── ABOUT ───────── */
+.about__grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.about__images{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;position:relative;min-height:420px}
+.about__img-main,.about__img-b,.about__img-c{overflow:hidden;border-radius:var(--r-img);background:linear-gradient(135deg,#cdddf0,#e7dcc9);min-height:420px;position:relative}
+.about__img-main img,.about__img-b img,.about__img-c img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.about__pill{
+  position:absolute;bottom:-1.5rem;right:-1.5rem;width:112px;height:112px;
+  background:rgba(43,127,255,.9);border:1px solid var(--glass-bd);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;z-index:2;
+}
+.about__pill-num{font-family:var(--head);font-size:1.9rem;font-weight:700;color:#fff;line-height:1}
+.about__pill-lbl{font-size:.46rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);text-align:center;padding:0 8px}
+
+/* ───────── WHY GRID ───────── */
+.why__grid-wrap{display:block}
+.why__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1140px;margin:0 auto}
+.why__card{
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd);border-radius:var(--r-card);
+  padding:2.25rem 2rem;position:relative;overflow:hidden;transition:background .25s,transform .25s;
+}
+.why__card:hover{background:var(--glass-strong);transform:translateY(-2px)}
+.why__card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--sky),var(--azure));transform:scaleX(0);transform-origin:left;transition:transform .38s}
+.why__card:hover::after{transform:scaleX(1)}
+.why__num{font-family:var(--head);font-size:2.4rem;font-weight:700;color:rgba(66,97,136,.18);position:absolute;top:1.1rem;right:1.5rem;line-height:1}
+.why__title{font-family:var(--sans);font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.6rem;line-height:1.3}
+.why__body{font-size:.83rem;font-weight:400;line-height:1.78;color:var(--muted)}
+
+/* ───────── CEREMONIES (destination cards) ───────── */
+.cer__grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.cer__card{position:relative;overflow:hidden;aspect-ratio:2/3;cursor:pointer;border-radius:var(--r-card);background:linear-gradient(160deg,#33485e,#5c4838)}
+.cer__bg{position:absolute;inset:0;transition:transform .65s ease}
+.cer__card:hover .cer__bg{transform:scale(1.06)}
+.cer__overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(18,12,8,.9) 0%,rgba(18,12,8,.25) 55%,transparent 100%);transition:background .35s}
+.cer__card:hover .cer__overlay{background:linear-gradient(to top,rgba(20,42,72,.88) 0%,rgba(43,127,255,.25) 55%,transparent 100%)}
+.cer__info{position:absolute;bottom:0;left:0;right:0;padding:1.4rem 1.25rem}
+.cer__day{font-size:.52rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--lift);margin-bottom:.35rem}
+.cer__name{font-family:var(--head);font-size:1.1rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:.4rem}
+.cer__desc{font-size:.68rem;font-weight:400;color:rgba(255,255,255,.72);line-height:1.6;margin-top:.25rem}
+
+/* ───────── STATS ───────── */
+.stats__grid{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;max-width:900px;margin:0 auto}
+.stat__item{padding:0 1.5rem}
+.stat__item+.stat__item{border-left:1px solid rgba(255,255,255,.16)}
+.stat__num{font-family:var(--head);font-size:3rem;font-weight:700;color:#dcebff;line-height:1;margin-bottom:.5rem}
+.stat__lbl{font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(238,245,252,.6);line-height:1.55}
+
+/* ───────── TESTIMONIALS ───────── */
+.testi__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.testi__card{
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd);border-radius:var(--r-card);padding:2.4rem 2rem;position:relative;transition:transform .3s,border-color .3s;
+}
+.testi__card:hover{transform:translateY(-3px);border-color:rgba(43,127,255,.5)}
+.testi__stars{color:var(--azure);font-size:.78rem;letter-spacing:3px;margin-bottom:1.2rem}
+.testi__quote{font-family:var(--script);font-size:1.1rem;font-style:italic;font-weight:600;color:var(--ink);line-height:1.72;margin-bottom:1.4rem}
+.testi__rule{width:24px;height:1.5px;background:var(--sky);margin-bottom:1rem}
+.testi__name{font-family:var(--head);font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--sky)}
+.testi__detail{font-size:.68rem;font-weight:400;color:var(--muted-2);font-style:italic;margin-top:.3rem}
+
+/* ───────── PACKAGES / TRIP IDEAS ───────── */
+.pkg__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pkg__card{
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd);border-radius:var(--r-card);border-top:2px solid transparent;
+  padding:2.4rem 2rem;position:relative;transition:background .25s,transform .3s,border-color .3s;display:flex;flex-direction:column;
+}
+.pkg__card:hover{background:var(--glass-strong);transform:translateY(-3px);border-top-color:var(--azure)}
+.pkg__card--feat{background:var(--glass-strong);border-top-color:var(--azure);box-shadow:0 8px 40px rgba(27,27,27,.1)}
+.pkg__best{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--azure);color:#fff;font-size:.5rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:.32rem 1rem;white-space:nowrap;border-radius:0 0 var(--r-input) var(--r-input)}
+.pkg__tier{font-size:.58rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--azure);margin-bottom:.7rem}
+.pkg__name{font-family:var(--head);font-size:1.7rem;font-weight:700;color:var(--ink);margin-bottom:.35rem;line-height:1.05}
+.pkg__tagline{font-family:var(--script);font-size:1.15rem;font-style:italic;font-weight:600;color:var(--sky);margin-bottom:1.4rem;padding-bottom:1.4rem;border-bottom:1px solid var(--border)}
+.pkg__list{list-style:none;margin-bottom:1.7rem;flex:1 0 auto}
+.pkg__list li{display:flex;align-items:flex-start;gap:.65rem;font-size:.82rem;font-weight:400;color:var(--muted);margin-bottom:.7rem;line-height:1.5}
+.pkg__list li::before{content:'—';color:var(--azure);font-size:.7rem;margin-top:1px;flex-shrink:0}
+.pkg__btn{
+  width:100%;margin-top:auto;padding:.8rem;background:rgba(255,255,255,.3);border:1.5px solid var(--azure);border-radius:var(--r-btn);color:var(--azure);
+  font-family:var(--sans);font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+  transition:all .22s;
+}
+.pkg__card--feat .pkg__btn{background:rgba(43,127,255,.9);color:#fff}
+.pkg__btn:hover{background:var(--azure);color:#fff}
+
+/* ───────── FORM ───────── */
+.form__layout{display:grid;grid-template-columns:1fr 1.1fr;gap:6rem;align-items:start}
+.form__intro-title{font-family:var(--head);font-size:clamp(1.8rem,2.8vw,2.8rem);font-weight:700;line-height:1.12;color:#eef5fc;margin-bottom:1rem;letter-spacing:-.02em}
+.form__intro-title em{font-family:var(--script);font-style:italic;font-weight:600;color:var(--lift)}
+.form__intro-body{font-size:.86rem;font-weight:400;line-height:1.82;color:rgba(238,245,252,.58);margin-bottom:1.75rem}
+.form__checklist{list-style:none}
+.form__checklist li{display:flex;align-items:flex-start;gap:.75rem;font-size:.82rem;font-weight:400;color:rgba(238,245,252,.62);margin-bottom:.85rem;line-height:1.5}
+.form__checklist li::before{content:'✓';color:var(--lift);font-size:.7rem;margin-top:.15rem;flex-shrink:0;font-weight:700}
+.form__card{background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);border:1px solid rgba(255,255,255,.16);border-radius:var(--r-card);padding:2.5rem}
+.form__card h3{font-family:var(--head);font-size:1.4rem;font-weight:700;color:#eef5fc;margin-bottom:.25rem}
+.form__card p{font-size:.74rem;font-weight:400;color:rgba(238,245,252,.45);margin-bottom:1.75rem}
+.form__row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1.25rem}
+.fg{margin-bottom:1.25rem}
+.fg label{display:block;font-size:.56rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(238,245,252,.5);margin-bottom:.4rem}
+.fg input,.fg select,.fg textarea{
+  width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:var(--r-input);
+  color:rgba(238,245,252,.92);padding:.6rem .65rem;font-family:var(--sans);font-size:.85rem;font-weight:400;outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;resize:none;
+}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(238,245,252,.3)}
+.fg select option{background:#1d2735;color:rgba(238,245,252,.92)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--lift);box-shadow:0 0 0 3px rgba(158,195,255,.18)}
+.budget__header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem}
+.budget__lbl{font-size:.56rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(238,245,252,.5)}
+.budget__val{font-family:var(--head);font-size:1.3rem;font-weight:700;color:var(--lift)}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;border-radius:3px;background:linear-gradient(to right,var(--azure) 0%,var(--azure) 21%,rgba(238,245,252,.14) 21%);outline:none;border:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;background:var(--azure);border-radius:50%;cursor:pointer;border:2px solid rgba(238,245,252,.5);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.budget__minmax{display:flex;justify-content:space-between;margin-top:.3rem}
+.budget__minmax span{font-size:.52rem;color:rgba(238,245,252,.3)}
+.cer__chk-title{font-size:.56rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--lift);margin-bottom:.6rem}
+.cer__checks{display:grid;grid-template-columns:1fr 1fr;gap:.45rem .75rem;margin-bottom:1.25rem}
+.chk{display:flex;align-items:center;gap:.55rem;cursor:pointer;font-size:.78rem;font-weight:400;color:rgba(238,245,252,.55)}
+.chk input[type=checkbox]{display:none}
+.chk__box{width:15px;height:15px;border:1px solid rgba(158,195,255,.4);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+.chk input:checked~.chk__box{background:var(--azure);border-color:var(--azure)}
+.chk input:checked~.chk__box::after{content:'✓';font-size:.55rem;color:#fff}
+.form__submit{
+  width:100%;background:rgba(43,127,255,.92);color:#fff;border:1px solid var(--azure);border-radius:var(--r-btn);
+  padding:1rem;font-family:var(--sans);font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;
+  transition:background .22s,transform .2s;margin-top:.5rem;
+}
+.form__submit:hover{background:var(--azure);transform:translateY(-1px)}
+.form__note{font-size:.56rem;font-weight:400;color:rgba(238,245,252,.32);margin-top:.8rem;line-height:1.6;text-align:center}
+
+/* ───────── FOOTER ───────── */
+.footer{background:rgba(24,24,24,.6);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border-top:1px solid rgba(255,255,255,.06);padding:3rem var(--gutter) 2rem}
+.footer__top{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:2.5rem;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.footer__logo{height:30px;width:auto;display:block;object-fit:contain;background:#fff;padding:7px 12px;border-radius:8px}
+.footer__brand-name{font-family:var(--head);font-size:1.15rem;font-weight:700;letter-spacing:.04em;color:rgba(238,245,252,.85);text-transform:uppercase}
+.footer__brand-name em{font-family:var(--script);font-style:italic;font-weight:600;text-transform:none;color:var(--lift)}
+.footer__brand-sub{font-size:.56rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--lift);margin-top:.35rem}
+.footer__brand p{font-size:.7rem;font-weight:400;color:rgba(238,245,252,.32);line-height:1.8;max-width:230px;margin-top:.75rem}
+.footer__cols{display:flex;gap:3.5rem}
+.footer__col h4{font-size:.54rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--lift);margin-bottom:.9rem}
+.footer__col ul{list-style:none}
+.footer__col li{font-size:.7rem;font-weight:400;color:rgba(238,245,252,.34);margin-bottom:.55rem;cursor:default;transition:color .2s}
+.footer__col li:hover{color:rgba(238,245,252,.7)}
+.footer__bottom{display:flex;align-items:center;justify-content:space-between}
+.footer__copy{font-size:.6rem;font-weight:400;color:rgba(238,245,252,.24);letter-spacing:.05em}
+.footer__legal{display:flex;gap:1.5rem}
+.footer__legal span{font-size:.6rem;font-weight:400;color:rgba(238,245,252,.28);cursor:default}
+
+/* ───────── SCROLL REVEAL ───────── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .75s ease,transform .75s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ───────── RESPONSIVE ───────── */
+@media(max-width:1100px){
+  :root{--gutter:2.5rem;--py:4rem}
+  .nav{padding:10px 1.5rem}
+  .nav__logo{height:19px}
+  .hero{grid-template-columns:1fr}
+  .hero__left{padding:4rem 2.5rem 3rem}
+  .hero__left::after{display:none}
+  .hero__right{height:60vw;min-height:300px}
+  .hero__float{display:none}
+  .trust__inner{flex-wrap:wrap;padding:0 2rem}
+  .trust__item{min-width:50%;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .about__grid,.form__layout{grid-template-columns:1fr;gap:3rem}
+  .about__images{min-height:auto;grid-template-columns:1fr}
+  .about__img-main,.about__img-b,.about__img-c{min-height:min(72vw,320px)}
+  .about__pill{display:none}
+  .why__grid{grid-template-columns:1fr 1fr}
+  .cer__grid{grid-template-columns:1fr 1fr}
+  .cer__card{aspect-ratio:1}
+  .stats__grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .stat__item+.stat__item{border-left:none}
+  .testi__grid,.pkg__grid{grid-template-columns:1fr;max-width:500px;margin:0 auto}
+  .form__row{grid-template-columns:1fr}
+  .footer__top{flex-direction:column;gap:2rem}
+  .footer__cols{flex-wrap:wrap;gap:2rem}
+}
+
+/* ═══════════════════════════
+   MOBILE CARD SCROLL + SCALE
+═══════════════════════════ */
+@media(max-width:768px){
+  :root{--gutter:1.25rem;--py:3rem}
+
+  /* Hero badges — center on mobile */
+  .hero__badges{text-align:center;font-size:.76rem}
+
+  /* Why / Experience section — full bleed scroll */
+  #celebrations .section__header{padding:0 1.25rem}
+  .why__grid-wrap{
+    margin-left:-1.25rem;margin-right:-1.25rem;
+    overflow-x:auto;overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:8px 1.25rem 6px 1.25rem;
+    display:flex;
+  }
+  .why__grid-wrap::-webkit-scrollbar{display:none}
+  .why__grid{
+    display:flex;flex-direction:row;gap:.85rem;align-items:stretch;
+    padding-right:1.25rem;
+    grid-template-columns:unset;
+  }
+  .why__card{
+    width:74vw;max-width:270px;flex-shrink:0;
+    scroll-snap-align:center;
+    transform:scale(0.92);opacity:0.72;
+    transition:transform .3s ease,opacity .3s ease;
+  }
+  .why__card.is-active{transform:scale(1);opacity:1}
+
+  /* Hero */
+  .hero{grid-template-columns:1fr}
+  .hero__left{padding:5rem 1.25rem 2.5rem}
+  .hero__left::after{display:none}
+  .hero__right{height:55vw;min-height:240px}
+  .hero__float{display:none}
+
+  /* Trust */
+  .trust__inner{flex-wrap:wrap;padding:0 1rem}
+  .trust__item{min-width:50%;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+
+  /* About */
+  .about__grid{grid-template-columns:1fr;gap:2rem}
+  .about__images{min-height:auto;grid-template-columns:1fr}
+  .about__img-main,.about__img-b,.about__img-c{min-height:min(65vw,280px)}
+  .about__pill{display:none}
+
+  /* Why */
+  .why__grid{grid-template-columns:1fr}
+
+  /* Stats */
+  .stats__grid{grid-template-columns:1fr 1fr;gap:1.5rem}
+  .stat__item+.stat__item{border-left:none}
+
+  /* Form */
+  .form__layout{grid-template-columns:1fr;gap:2rem}
+  .form__row{grid-template-columns:1fr}
+
+  /* ── CER / DESTINATIONS — full bleed scroll ── */
+  #venues .cer__grid-wrap{
+    margin-left:-1.25rem;margin-right:-1.25rem;
+    overflow-x:auto;overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:8px 1.25rem 6px 1.25rem;
+    display:flex;
+  }
+  #venues .cer__grid-wrap::-webkit-scrollbar{display:none}
+  #venues .cer__grid{
+    display:flex;flex-direction:row;gap:.85rem;align-items:stretch;
+    padding-right:1.25rem;
+  }
+  .cer__card{
+    width:74vw;max-width:270px;flex-shrink:0;
+    scroll-snap-align:center;aspect-ratio:3/4;
+    transform:scale(0.92);opacity:0.72;
+    transition:transform .3s ease,opacity .3s ease;
+  }
+  .cer__card.is-active{transform:scale(1);opacity:1}
+
+  /* ── TESTIMONIALS — full bleed scroll ── */
+  #stories .testi__grid-wrap{
+    margin-left:-1.25rem;margin-right:-1.25rem;
+    overflow-x:auto;overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:8px 1.25rem 6px 1.25rem;
+    display:flex;
+  }
+  #stories .testi__grid-wrap::-webkit-scrollbar{display:none}
+  #stories .testi__grid{
+    display:flex;flex-direction:row;gap:.85rem;align-items:stretch;
+    padding-right:1.25rem;
+  }
+  .testi__card{
+    width:80vw;max-width:290px;flex-shrink:0;
+    scroll-snap-align:center;
+    transform:scale(0.92);opacity:0.72;
+    transition:transform .3s ease,opacity .3s ease;
+  }
+  .testi__card.is-active{transform:scale(1);opacity:1}
+
+  /* ── PACKAGES / TRIP IDEAS — full bleed scroll ── */
+  #gallery .pkg__grid-wrap{
+    margin-left:-1.25rem;margin-right:-1.25rem;
+    overflow-x:auto;overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:1.4rem 1.25rem 6px 1.25rem;
+    display:flex;
+  }
+  #gallery .pkg__grid-wrap::-webkit-scrollbar{display:none}
+  #gallery .pkg__grid{
+    display:flex;flex-direction:row;gap:.85rem;align-items:stretch;
+    padding-right:1.25rem;
+  }
+  .pkg__card{
+    width:78vw;max-width:290px;flex-shrink:0;
+    scroll-snap-align:center;
+    transform:scale(0.92);opacity:0.72;
+    transition:transform .3s ease,opacity .3s ease,background .25s,border-color .3s;
+  }
+  .pkg__card.is-active{transform:scale(1);opacity:1}
+
+  /* Footer */
+  .footer__top{flex-direction:column;gap:2rem}
+  .footer__cols{flex-wrap:wrap;gap:2rem}
+}
+
+section[id]{scroll-margin-top:96px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav__brand">
+    <img class="nav__logo" src="https://www.destinationpick.com/images/logo.webp" alt="DestinationPick" onerror="this.style.display='none'"/>
+  </a>
+  <div class="nav__links">
+    <a href="#discover">Discover Los Cabos</a>
+    <a href="#venues">Handpicked Wedding Venues</a>
+    <a href="#celebrations">Luxury Celebrations</a>
+    <a href="#stories">Real Wedding Stories</a>
+  </div>
+  <button class="nav__cta" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Schedule Free Consultation</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero__left">
+    <p class="hero__badges">500+ Real Weddings Executed ✦ 30+ Years of Expertise ✦ 20,000+ Multi-Day Guests Hosted ✦ Official Tourism Board Partner</p>
+    <span class="hero__brand">Los Cabos Tourism Board</span>
+    <p class="hero__tagline">Far Enough Away. Close Enough to Perfect.</p>
+    <h1 style="font-family:var(--head);font-size:clamp(2.6rem,4.2vw,5rem);font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--ink);margin-bottom:1.5rem;text-transform:uppercase">At the Edge of Land and <em style="font-family:var(--script);font-style:italic;font-weight:600;color:var(--sky);text-transform:none;display:inline-block;line-height:1.1;font-size:.88em">Endless Blue</em></h1>
+    <p class="body-text hero__desc">Somewhere at the tip of Baja California, two oceans decided to meet. The result? One of the most jaw dropping coastlines on earth and honestly, one of the best places to be.</p>
+    <p class="body-text hero__desc" style="margin-top:.85rem">Desert cliffs, turquoise water, world class fishing, and sunsets that stop conversations mid-sentence. Los Cabos moves between adventure and stillness better than anywhere else in Mexico.</p>
+    <div class="hero__actions" style="margin-top:1.8rem">
+      <button class="btn" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Book your Free Consultation Today</button>
+      <button class="btn btn--outline" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">See What Your Big Day Could Look Like</button>
+    </div>
+  </div>
+  <div class="hero__right">
+    <div class="hero__scene">
+      <img src="images/hero-lands-end.jpg" alt="Land's End, El Arco — Los Cabos" decoding="async" fetchpriority="high">
+    </div>
+    <div class="hero__overlay"></div>
+    <div class="hero__caption">Land's End · Cabo San Lucas<br/>El Arco · Jet Ski Adventure</div>
+    <div class="hero__float">
+      <div class="hero__float-title">Plan Your Visit</div>
+      <div class="hero__float-sub">Get personalized Los Cabos trip ideas within 24 hours.</div>
+      <div class="hff">
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Email Address">
+        <select><option value="" disabled selected>Country</option><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Mexico</option><option>Other</option></select>
+        <input type="text" placeholder="Travel Dates (approx.)">
+      </div>
+      <button class="hff-btn" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Get My Trip Ideas →</button>
+      <p class="hff-note" style="margin-top:.65rem">Free • No spam • 24-hour response</p>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="trust__inner">
+    <div class="trust__item"><div class="trust__label"><strong>Two Oceans View</strong>Sea of Cortés &amp; Pacific</div></div>
+    <div class="trust__item"><div class="trust__label"><strong>Land's End Arch</strong>Iconic natural monument</div></div>
+    <div class="trust__item"><div class="trust__label"><strong>Blue Flag Beaches</strong>Swimmable coastal bays</div></div>
+    <div class="trust__item"><div class="trust__label"><strong>Michelin Dining</strong>World class gastronomy</div></div>
+    <div class="trust__item"><div class="trust__label"><strong>Year-Round Sunshine</strong>300+ perfect days</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section section--clear" id="discover">
+  <div style="max-width:1140px;margin:0 auto">
+    <div class="about__grid reveal">
+      <div class="about__images">
+        <div class="about__img-main"><img src="images/about-beach-cove.jpg" alt="Turquoise beach cove, Los Cabos"></div>
+        <div class="about__img-b"><img src="images/about-luxury-pool.jpg" alt="Luxury resort pool"></div>
+        <div class="about__img-c"><img src="images/hero-lands-end.jpg" alt="Land's End, El Arco"></div>
+        <div class="about__pill"><span class="about__pill-num">2</span><span class="about__pill-lbl">Oceans Meet</span></div>
+      </div>
+      <div>
+        <span class="label">About Los Cabos</span>
+        <div class="rule"></div>
+        <h2>Land's End. And the <em>Beginning</em> of Everything Else.</h2>
+        <div class="rule" style="margin-top:1.5rem"></div>
+        <p class="body-text" style="margin-bottom:1.1rem">Los Cabos isn't subtle. Desert cliffs fall straight into turquoise water, two oceans meet at the same shoreline, and the landscape somehow manages to feel both wild and completely peaceful at the same time.</p>
+        <p class="body-text" style="margin-bottom:1.1rem">It's the kind of place that's hard to explain until you're standing in it where you can go deep-sea fishing in the morning, do nothing by the pool in the afternoon, and watch the sun drop into the Pacific at the end of the day.</p>
+        <p class="body-text" style="margin-bottom:2rem">There's a reason people come here once and start planning the next trip before they've even left.</p>
+        <button class="btn" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Start Planning Your Escape</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCES -->
+<section class="section section--glass" id="celebrations">
+  <div style="max-width:1140px;margin:0 auto">
+    <div class="section__header section__header--center reveal">
+      <span class="label">Experience Los Cabos</span>
+      <div class="rule rule--center"></div>
+      <h2>Experience Los <em>Cabos</em></h2>
+    </div>
+  </div>
+  <div class="why__grid-wrap reveal">
+    <div class="why__grid">
+      <div class="why__card"><div class="why__num">01</div><div class="why__title">Ocean Encounters</div><p class="why__body">Here the Arch meets the horizon — paddle through sunrise waters, snorkel vibrant seas, and witness whales in their seasonal migration.</p></div>
+      <div class="why__card"><div class="why__num">02</div><div class="why__title">Desert &amp; Outdoor Adventures</div><p class="why__body">Race across golden desert trails, soar through canyon zip lines, hike the Sierra de la Laguna mountains, and venture into deep-sea fishing beyond the horizon.</p></div>
+      <div class="why__card"><div class="why__num">03</div><div class="why__title">Michelin-Recognized Gastronomy</div><p class="why__body">A world class culinary destination featuring Michelin-recognized dining, fresh coastal seafood, refined farm-to-table cuisine, and innovative Mexican gastronomy.</p></div>
+      <div class="why__card"><div class="why__num">04</div><div class="why__title">Beaches &amp; Coastal Luxury</div><p class="why__body">Relax on Blue Flag beaches like Chileno and Santa María, or discover the golden sands of Médano and the secluded beauty of Lover's Beach.</p></div>
+      <div class="why__card"><div class="why__num">05</div><div class="why__title">Wellness &amp; Spa Retreats</div><p class="why__body">Oceanfront spa sanctuaries, restorative yoga sessions, sound healing, and holistic wellness experiences designed for deep relaxation and renewal.</p></div>
+      <div class="why__card"><div class="why__num">06</div><div class="why__title">Sustainable Luxury Travel</div><p class="why__body">Eco-conscious experiences rooted in marine conservation at Cabo Pulmo and community-led preservation initiatives that protect Los Cabos.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="section section--clear" id="venues">
+  <div style="max-width:1140px;margin:0 auto">
+    <div class="section__header section__header--center reveal">
+      <span class="label">Destinations</span>
+      <div class="rule rule--center"></div>
+      <h2>From Coastal Towns to <em>Hidden Gems</em></h2>
+    </div>
+  </div>
+  <div class="cer__grid-wrap reveal" style="max-width:1140px;margin:0 auto">
+    <div class="cer__grid">
+      <div class="cer__card"><div class="cer__bg"><img src="https://assets.simpleviewinc.com/sv-loscabos/image/upload/c_fill,f_jpg,h_700,q_65,w_640/v1/cms_resources/clients/loscabosmx/Places_to_visit_Cabo_San_Lucas_af50c8dd-f76f-4b5f-a20f-c4332772ad6a.jpg" alt="Cabo San Lucas" referrerpolicy="no-referrer" onerror="this.style.opacity=0"></div><div class="cer__overlay"></div><div class="cer__info"><div class="cer__day">Marina &amp; Nightlife</div><div class="cer__name">Cabo San Lucas</div><div class="cer__desc">A vibrant coastal hub defined by luxury resorts, world class marinas, and the iconic El Arco.</div></div></div>
+      <div class="cer__card"><div class="cer__bg"><img src="https://assets.simpleviewinc.com/sv-loscabos/image/upload/c_fill,f_jpg,h_700,q_65,w_640/v1/clients/loscabosmx/San_Jose_del_Cabo_Family_Lifestyle_44e8baca-cef8-4afd-8a90-4ae24fd1763c.jpg" alt="San José del Cabo" referrerpolicy="no-referrer" onerror="this.style.opacity=0"></div><div class="cer__overlay"></div><div class="cer__info"><div class="cer__day">Art &amp; Culture</div><div class="cer__name">San José del Cabo</div><div class="cer__desc">A refined colonial town of cobblestone streets, contemporary galleries, and the celebrated weekly Art Walk.</div></div></div>
+      <div class="cer__card"><div class="cer__bg"><img src="https://assets.simpleviewinc.com/sv-loscabos/image/upload/c_fill,f_jpg,h_700,q_65,w_640/v1/cms_resources/clients/loscabosmx/Sea_The_Arch_01__b65cbf4a-cf50-4619-a470-a3c398c57b33.jpg" alt="El Arco" referrerpolicy="no-referrer" onerror="this.style.opacity=0"></div><div class="cer__overlay"></div><div class="cer__info"><div class="cer__day">Land's End</div><div class="cer__name">El Arco</div><div class="cer__desc">The legendary natural rock formation where the Pacific Ocean meets the Sea of Cortez.</div></div></div>
+      <div class="cer__card"><div class="cer__bg"><img src="https://assets.simpleviewinc.com/sv-loscabos/image/upload/c_fill,f_jpg,g_xy_center,h_700,q_65,w_640,x_2170,y_760/v1/cms_resources/clients/loscabosmx/Cabo_Pulmo_Turtle_a4a57165-75a3-479c-8cb7-fa9d3c6f2b74.jpg" alt="Cabo Pulmo" referrerpolicy="no-referrer" onerror="this.style.opacity=0"></div><div class="cer__overlay"></div><div class="cer__info"><div class="cer__day">Marine Sanctuary</div><div class="cer__name">Cabo Pulmo</div><div class="cer__desc">A UNESCO-protected reef ecosystem known as the "Aquarium of the World."</div></div></div>
+      <div class="cer__card"><div class="cer__bg"><img src="https://assets.simpleviewinc.com/sv-loscabos/image/upload/c_fill,f_jpg,h_700,q_65,w_640/v1/cms_resources/clients/loscabosmx/Todos_Santos_1_b77d93c1-3c8f-4f4e-8e9a-099f2ed15a2c.jpg" alt="Todos Santos" referrerpolicy="no-referrer" onerror="this.style.opacity=0"></div><div class="cer__overlay"></div><div class="cer__info"><div class="cer__day">Pueblo Mágico</div><div class="cer__name">Todos Santos</div><div class="cer__desc">A bohemian desert escape blending surf culture, art galleries, and boutique charm.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS parallax -->
+<section class="section section--wine stats-parallax" style="padding:5rem var(--gutter)">
+  <div class="stats__grid reveal">
+    <div class="stat__item"><div class="stat__num">2</div><div class="stat__lbl">Oceans as Your Ceremony Backdrop</div></div>
+    <div class="stat__item"><div class="stat__num">300+</div><div class="stat__lbl">Days of Celebration-Ready Sunshine</div></div>
+    <div class="stat__item"><div class="stat__num">★</div><div class="stat__lbl">Michelin-Recognized Wedding Dining</div></div>
+    <div class="stat__item"><div class="stat__num">24°C</div><div class="stat__lbl">Perfect Year-Round Wedding Climate</div></div>
+  </div>
+</section>
+
+<!-- TRAVEL STORIES -->
+<section class="section section--clear" id="stories">
+  <div style="max-width:1140px;margin:0 auto">
+    <div class="section__header section__header--center reveal">
+      <span class="label">Travel Stories</span>
+      <div class="rule rule--center"></div>
+      <h2>Where Moments Become <em>Memories</em></h2>
+    </div>
+  </div>
+  <div class="testi__grid-wrap reveal" style="max-width:1140px;margin:0 auto">
+    <div class="testi__grid">
+      <div class="testi__card"><div class="testi__stars">★★★★★</div><p class="testi__quote">"Our wedding week felt like a dream — whales, ocean breezes, and Cabo Pulmo snorkeling made it unforgettable beyond words."</p><div class="testi__rule"></div><div class="testi__name">Mara &amp; Daniel</div><div class="testi__detail">Destination Wedding Celebration</div></div>
+      <div class="testi__card"><div class="testi__stars">★★★★★</div><p class="testi__quote">"A Michelin-level dinner set directly on the beach in San José del Cabo turned an evening into an unforgettable experience."</p><div class="testi__rule"></div><div class="testi__name">Priyanka R.</div><div class="testi__detail">Culinary Escape</div></div>
+      <div class="testi__card"><div class="testi__stars">★★★★★</div><p class="testi__quote">"Every moment of our celebration, from El Arco sunrise to sunset gatherings, felt effortless and cinematic."</p><div class="testi__rule"></div><div class="testi__name">Alvarez Family</div><div class="testi__detail">Wedding Journey</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRIP IDEAS -->
+<section class="section section--glass" id="gallery">
+  <div style="max-width:1140px;margin:0 auto">
+    <div class="section__header section__header--center reveal">
+      <span class="label">Trip Ideas</span>
+      <div class="rule rule--center"></div>
+      <h2>Find Your <em>Perfect Escape</em></h2>
+    </div>
+  </div>
+  <div class="pkg__grid-wrap reveal" style="max-width:1140px;margin:0 auto">
+    <div class="pkg__grid">
+      <div class="pkg__card">
+        <div class="pkg__tier">For Couples</div>
+        <div class="pkg__name">Romance</div>
+        <div class="pkg__tagline">Sunset sails &amp; oceanfront luxury</div>
+        <ul class="pkg__list">
+          <li>Sunset sails for pre-wedding moments</li>
+          <li>Oceanfront luxury stays</li>
+          <li>Spa rituals before your big day</li>
+          <li>Private dining experiences</li>
+          <li>Honeymoon escapes designed for intimacy</li>
+        </ul>
+        <button class="pkg__btn" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Plan This Trip →</button>
+      </div>
+      <div class="pkg__card pkg__card--feat">
+        <div class="pkg__best">Most Loved</div>
+        <div class="pkg__tier">For Explorers</div>
+        <div class="pkg__name">Adventure</div>
+        <div class="pkg__tagline">Two oceans, endless thrills</div>
+        <ul class="pkg__list">
+          <li>Whale watching experiences</li>
+          <li>Marine life diving at Cabo Pulmo</li>
+          <li>Iconic El Arco excursions</li>
+          <li>Desert ATV adventures</li>
+          <li>Deep-sea fishing journeys</li>
+        </ul>
+        <button class="pkg__btn" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Plan This Trip →</button>
+      </div>
+      <div class="pkg__card">
+        <div class="pkg__tier">For Families</div>
+        <div class="pkg__name">Celebration Travel</div>
+        <div class="pkg__tagline">Shared moments for every generation</div>
+        <ul class="pkg__list">
+          <li>Swimmable beaches for all ages</li>
+          <li>Family-friendly luxury resorts</li>
+          <li>Private yacht experiences</li>
+          <li>Wellness activities</li>
+          <li>Shared culinary journeys</li>
+        </ul>
+        <button class="pkg__btn" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">Plan This Trip →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="section section--dark" id="consult">
+  <div style="max-width:1140px;margin:0 auto">
+    <div class="form__layout reveal">
+      <div class="form__left">
+        <span class="label">Plan Your Visit</span>
+        <div class="rule rule--light" style="margin:1rem 0 1.5rem"></div>
+        <h2 class="form__intro-title">Tell Us About Your <em>Dream Escape</em></h2>
+        <p class="form__intro-body">Get a personalized Los Cabos itinerary designed around your travel style, budget, and season.</p>
+        <p class="form__intro-body" style="margin-top:1rem;font-weight:600;color:rgba(255,255,255,.9)">What You'll Receive (Within 24 Hours):</p>
+        <ul class="form__checklist">
+          <li>A fully customized travel itinerary</li>
+          <li>Curated recommendations for beaches, stays &amp; dining</li>
+          <li>Seasonal highlights (whale watching, festivals, golf, and more)</li>
+          <li>Tailored suggestions for luxury, family, or adults-only experiences</li>
+          <li>Complimentary travel inspiration with no obligation</li>
+        </ul>
+      </div>
+      <div class="form__card" id="formWrap">
+        <div id="formContent">
+          <h3>Get a Personalized Plan</h3>
+          <p>Your Los Cabos itinerary within 24 hours</p>
+          <div class="form__row">
+            <div class="fg"><label>First Name *</label><input type="text" placeholder="e.g. Maria" id="firstName"></div>
+            <div class="fg"><label>Last Name *</label><input type="text" placeholder="e.g. Lopez" id="lastName"></div>
+          </div>
+          <div class="form__row">
+            <div class="fg"><label>Your Email *</label><input type="email" placeholder="you@email.com" id="email"></div>
+            <div class="fg"><label>Country *</label><select id="country"><option value="" disabled selected>Select country</option><option>🇺🇸 United States</option><option>🇨🇦 Canada</option><option>🇲🇽 Mexico</option><option>Other</option></select></div>
+          </div>
+          <div class="form__row">
+            <div class="fg"><label>Travel Dates (Approx)</label><input type="date" id="travelDate"></div>
+            <div class="fg"><label>Who's Travelling *</label><select id="guests"><option value="" disabled selected>Select</option><option>Solo</option><option>Couple</option><option>Family</option><option>Group of Friends</option></select></div>
+          </div>
+          <div class="form__row">
+            <div class="fg"><label>Trip Style</label><select id="tripStyle"><option value="" disabled selected>Select</option><option>Romantic</option><option>Family</option><option>Adventure</option><option>Wellness</option><option>Golf</option><option>Foodie</option></select></div>
+            <div class="fg"><label>Where to Stay</label><select id="stayType"><option value="" disabled selected>Select</option><option>Luxury Resort</option><option>All-Inclusive</option><option>Adults-Only</option><option>Family Resort</option><option>Private Villa</option></select></div>
+          </div>
+          <div class="fg" style="margin-bottom:.75rem">
+            <div class="cer__chk-title">Interests</div>
+            <div class="cer__checks">
+              <label class="chk"><input type="checkbox" value="Beaches" class="interest-chk"><div class="chk__box"></div>Beaches</label>
+              <label class="chk"><input type="checkbox" value="Whale Watching" class="interest-chk"><div class="chk__box"></div>Whale Watching</label>
+              <label class="chk"><input type="checkbox" value="Gastronomy" class="interest-chk"><div class="chk__box"></div>Gastronomy</label>
+              <label class="chk"><input type="checkbox" value="Golf" class="interest-chk"><div class="chk__box"></div>Golf</label>
+              <label class="chk"><input type="checkbox" value="Spa & Wellness" class="interest-chk"><div class="chk__box"></div>Spa &amp; Wellness</label>
+              <label class="chk"><input type="checkbox" value="Adventure" class="interest-chk"><div class="chk__box"></div>Adventure</label>
+            </div>
+          </div>
+          <div class="fg">
+            <div class="budget__header"><span class="budget__lbl">Budget Per Person</span><span class="budget__val" id="budgetDisplay">$5,000</span></div>
+            <input type="range" id="budget" min="1000" max="20000" step="500" value="5000" oninput="updateBudget(this.value)">
+            <div class="budget__minmax"><span>$1,000</span><span>$20,000+</span></div>
+          </div>
+          <button class="form__submit" onclick="submitForm()">Get a Personalized Plan</button>
+          <p class="form__note">100% free • No spams • Delivered in 24 hours • Custom travel recommendations</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <img class="footer__logo" src="https://www.destinationpick.com/images/logo.webp" alt="DestinationPick" onerror="this.style.display='none'"/>
+      <div class="footer__brand-sub">Los Cabos · Baja California Sur · Mexico</div>
+      <p>DestinationPick × Los Cabos Tourism Board — your inspiration hub where two oceans meet to begin something new.</p>
+    </div>
+    <div class="footer__cols">
+      <div class="footer__col"><h4>Explore</h4><ul><li>Places to Visit</li><li>Experiences</li><li>Beaches</li><li>Gastronomy</li></ul></div>
+      <div class="footer__col"><h4>Plan</h4><ul><li>Where to Stay</li><li>Getting Here</li><li>Events</li><li>Newsletter</li></ul></div>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">© 2026 Los Cabos Tourism Board. All rights reserved.</span>
+    <div class="footer__legal"><span>Privacy Policy</span><span>Terms of Use</span></div>
+  </div>
+</footer>
+
+<script>
+/* ── SCROLL REVEAL ── */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ── BUDGET SLIDER ── */
+function updateBudget(val){
+  const v=parseInt(val);
+  document.getElementById('budgetDisplay').textContent = v>=20000?'$20,000+':'$'+v.toLocaleString();
+  const pct=((v-1000)/(20000-1000))*100;
+  document.getElementById('budget').style.background=`linear-gradient(to right,var(--azure) 0%,var(--azure) ${pct}%,rgba(238,245,252,.14) ${pct}%)`;
+}
+
+/* ── GOOGLE SHEETS FORM ── */
+const GOOGLE_SHEET_URL='https://script.google.com/macros/s/AKfycbxXzHNa5-7omZZHaC_aJup44PkukqT1rhe6qTYw19FnbweauZp2oZMW21AIA_FlbW6_/exec';
+function submitForm(){
+  const req=['firstName','lastName','email','country','guests'];let ok=true;
+  req.forEach(id=>{const el=document.getElementById(id);if(!el.value.trim()){el.style.borderColor='var(--error)';ok=false;}else el.style.borderColor='';});
+  if(!ok)return;
+  const interests=[];
+  document.querySelectorAll('.interest-chk:checked').forEach(chk=>interests.push(chk.value));
+  const data={
+    firstName:document.getElementById('firstName').value.trim(),
+    lastName:document.getElementById('lastName').value.trim(),
+    email:document.getElementById('email').value.trim(),
+    country:document.getElementById('country').value,
+    travelDate:document.getElementById('travelDate').value,
+    guests:document.getElementById('guests').value,
+    tripStyle:document.getElementById('tripStyle').value||'',
+    stayType:document.getElementById('stayType').value||'',
+    interests:interests.join(', '),
+    budget:document.getElementById('budgetDisplay').textContent,
+    submittedAt:new Date().toLocaleString()
+  };
+  const params=new URLSearchParams(data).toString();
+  fetch(GOOGLE_SHEET_URL+'?'+params,{mode:'no-cors'});
+  window.location.href='thank.html';
+}
+
+/* ── MOBILE CARD SCALE ANIMATION ── */
+function initCardScroll(){
+  if(window.innerWidth>768)return;
+  var scrollers=[
+    {el:document.querySelector('.why__grid-wrap'),cards:document.querySelectorAll('.why__card')},
+    {el:document.querySelector('#venues .cer__grid-wrap'),cards:document.querySelectorAll('#venues .cer__card')},
+    {el:document.querySelector('#stories .testi__grid-wrap'),cards:document.querySelectorAll('#stories .testi__card')},
+    {el:document.querySelector('#gallery .pkg__grid-wrap'),cards:document.querySelectorAll('#gallery .pkg__card')}
+  ];
+  function updateActive(s){
+    if(!s.el)return;
+    var center=s.el.scrollLeft+s.el.offsetWidth/2;
+    s.cards.forEach(function(card){
+      var dist=Math.abs((card.offsetLeft+card.offsetWidth/2)-center);
+      if(dist<card.offsetWidth*0.6)card.classList.add('is-active');
+      else card.classList.remove('is-active');
+    });
+  }
+  scrollers.forEach(function(s){
+    if(!s.el)return;
+    if(s.cards[0])s.cards[0].classList.add('is-active');
+    s.el.addEventListener('scroll',function(){requestAnimationFrame(function(){updateActive(s)})},{passive:true});
+  });
+}
+window.addEventListener('load',initCardScroll);
+window.addEventListener('resize',function(){initCardScroll()});
+</script>
+</body>
+</html>
