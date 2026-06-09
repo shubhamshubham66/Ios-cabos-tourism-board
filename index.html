@@ -582,7 +582,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="section__header section__header--center reveal">
       <span class="label">Experience Los Cabos</span>
       <div class="rule rule--center"></div>
-      <h2>Experience Los <em>Cabos</em></h2>
+      <h2>Why Celebrate in Los <em>Cabos</em></h2>
     </div>
   </div>
   <div class="why__grid-wrap reveal">
@@ -651,7 +651,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="section__header section__header--center reveal">
       <span class="label">Find Your Perfect Escape</span>
       <div class="rule rule--center"></div>
-      <h2>Find Your <em>Perfect Escape</em></h2>
+      <h2>Curated Trip <em>Ideas</em></h2>
     </div>
   </div>
   <div class="pkg__grid-wrap reveal" style="max-width:1140px;margin:0 auto">
@@ -722,38 +722,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div id="formContent">
           <h3>Get Your Personalized Wedding Plan</h3>
           <p>Your custom Los Cabos celebration itinerary within 24 hours.</p>
-          <div class="form__row">
-            <div class="fg"><label>First Name *</label><input type="text" placeholder="e.g. Maria" id="firstName"></div>
-            <div class="fg"><label>Last Name *</label><input type="text" placeholder="e.g. Lopez" id="lastName"></div>
-          </div>
-          <div class="form__row">
-            <div class="fg"><label>Your Email *</label><input type="email" placeholder="you@email.com" id="email"></div>
-            <div class="fg"><label>Country *</label><select id="country"><option value="" disabled selected>Select country</option><option>🇺🇸 United States</option><option>🇨🇦 Canada</option><option>🇲🇽 Mexico</option><option>Other</option></select></div>
-          </div>
-          <div class="form__row">
-            <div class="fg"><label>Travel Dates (Approx)</label><input type="date" id="travelDate"></div>
-            <div class="fg"><label>Who's Travelling *</label><select id="guests"><option value="" disabled selected>Select</option><option>Solo</option><option>Couple</option><option>Family</option><option>Group of Friends</option></select></div>
-          </div>
-          <div class="form__row">
-            <div class="fg"><label>Trip Style</label><select id="tripStyle"><option value="" disabled selected>Select</option><option>Romantic</option><option>Family</option><option>Adventure</option><option>Wellness</option><option>Golf</option><option>Foodie</option></select></div>
-            <div class="fg"><label>Where to Stay</label><select id="stayType"><option value="" disabled selected>Select</option><option>Luxury Resort</option><option>All-Inclusive</option><option>Adults-Only</option><option>Family Resort</option><option>Private Villa</option></select></div>
-          </div>
-          <div class="fg" style="margin-bottom:.75rem">
-            <div class="cer__chk-title">Interests</div>
-            <div class="cer__checks">
-              <label class="chk"><input type="checkbox" value="Beaches" class="interest-chk"><div class="chk__box"></div>Beaches</label>
-              <label class="chk"><input type="checkbox" value="Whale Watching" class="interest-chk"><div class="chk__box"></div>Whale Watching</label>
-              <label class="chk"><input type="checkbox" value="Gastronomy" class="interest-chk"><div class="chk__box"></div>Gastronomy</label>
-              <label class="chk"><input type="checkbox" value="Golf" class="interest-chk"><div class="chk__box"></div>Golf</label>
-              <label class="chk"><input type="checkbox" value="Spa & Wellness" class="interest-chk"><div class="chk__box"></div>Spa &amp; Wellness</label>
-              <label class="chk"><input type="checkbox" value="Adventure" class="interest-chk"><div class="chk__box"></div>Adventure</label>
-            </div>
-          </div>
-          <div class="fg">
-            <div class="budget__header"><span class="budget__lbl">Budget Per Person</span><span class="budget__val" id="budgetDisplay">$5,000</span></div>
-            <input type="range" id="budget" min="1000" max="20000" step="500" value="5000" oninput="updateBudget(this.value)">
-            <div class="budget__minmax"><span>$1,000</span><span>$20,000+</span></div>
-          </div>
+          <div class="fg"><label>Full Name *</label><input type="text" placeholder="Full name" id="fullName"></div>
+          <div class="fg"><label>Phone Number *</label><input type="tel" placeholder="+1 (___) ___-____" id="phone"></div>
+          <div class="fg"><label>Country *</label><select id="country"><option value="" disabled selected>Select country</option><option>United States</option><option>Canada</option><option>Mexico</option></select></div>
+          <div class="fg"><label>Estimated Guest Count</label><input type="number" placeholder="e.g. 150" id="guestCount"></div>
+          <div class="fg"><label>Wedding Date</label><input type="date" id="weddingDate"></div>
+          <div class="fg"><label>Estimated Budget Range</label><select id="budget"><option value="" disabled selected>Select</option><option>Under $15,000</option><option>$15,000 – $30,000</option><option>$30,000 – $75,000</option><option>$75,000+</option></select></div>
           <button class="form__submit" onclick="submitForm()">Get a Personalized Plan</button>
           <p class="form__note">100% free • No spams • Delivered in 24 hours • Custom travel recommendations</p>
         </div>
@@ -786,33 +760,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* ── BUDGET SLIDER ── */
-function updateBudget(val){
-  const v=parseInt(val);
-  document.getElementById('budgetDisplay').textContent = v>=20000?'$20,000+':'$'+v.toLocaleString();
-  const pct=((v-1000)/(20000-1000))*100;
-  document.getElementById('budget').style.background=`linear-gradient(to right,var(--azure) 0%,var(--azure) ${pct}%,rgba(238,245,252,.14) ${pct}%)`;
-}
-
 /* ── GOOGLE SHEETS FORM ── */
 const GOOGLE_SHEET_URL='https://script.google.com/macros/s/AKfycbxXzHNa5-7omZZHaC_aJup44PkukqT1rhe6qTYw19FnbweauZp2oZMW21AIA_FlbW6_/exec';
 function submitForm(){
-  const req=['firstName','lastName','email','country','guests'];let ok=true;
+  const req=['fullName','phone'];let ok=true;
   req.forEach(id=>{const el=document.getElementById(id);if(!el.value.trim()){el.style.borderColor='var(--error)';ok=false;}else el.style.borderColor='';});
   if(!ok)return;
-  const interests=[];
-  document.querySelectorAll('.interest-chk:checked').forEach(chk=>interests.push(chk.value));
   const data={
-    firstName:document.getElementById('firstName').value.trim(),
-    lastName:document.getElementById('lastName').value.trim(),
-    email:document.getElementById('email').value.trim(),
-    country:document.getElementById('country').value,
-    travelDate:document.getElementById('travelDate').value,
-    guests:document.getElementById('guests').value,
-    tripStyle:document.getElementById('tripStyle').value||'',
-    stayType:document.getElementById('stayType').value||'',
-    interests:interests.join(', '),
-    budget:document.getElementById('budgetDisplay').textContent,
+    fullName:document.getElementById('fullName').value.trim(),
+    phone:document.getElementById('phone').value.trim(),
+    country:document.getElementById('country').value||'Not specified',
+    guestCount:document.getElementById('guestCount').value||'Not specified',
+    weddingDate:document.getElementById('weddingDate').value||'Not specified',
+    budget:document.getElementById('budget').value||'Not specified',
     submittedAt:new Date().toLocaleString()
   };
   const params=new URLSearchParams(data).toString();
