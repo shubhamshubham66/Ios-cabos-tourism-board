@@ -353,6 +353,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;heigh
 @media(max-width:768px){
   :root{--gutter:1.25rem;--py:3rem}
 
+  /* Nav CTA — fixed bottom right */
+  .nav{padding:10px 1rem!important}
+  .nav__cta{
+    position:fixed!important;
+    bottom:1.25rem;right:1.25rem;
+    top:auto!important;
+    z-index:999;
+    padding:.7rem 1.2rem!important;
+    font-size:.58rem!important;
+    background:var(--azure)!important;
+    color:#fff!important;
+    border:none!important;
+    box-shadow:0 4px 20px rgba(43,127,255,0.4);
+    border-radius:var(--r-btn)!important;
+  }
+
   /* Hero badges — center on mobile */
   .hero__badges{text-align:center;font-size:.76rem}
 
